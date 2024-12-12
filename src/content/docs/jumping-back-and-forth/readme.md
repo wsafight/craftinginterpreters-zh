@@ -1,4 +1,7 @@
-# 23.来回跳转 Jumping Back and Forth
+---
+title: 23. 来回跳转
+description: Jumping Back and Forth
+---
 
 > The order that our mind imagines is like a net, or like a ladder, built to attain something. But afterward you must throw the ladder away, because you discover that, even if it was useful, it was meaningless.
 >
@@ -99,7 +102,7 @@ static void ifStatement() {
 
 然后我们生成一个新的`OP_JUMP_IF_ELSE`指令。这条指令有一个操作数，用来表示`ip`的偏移量——要跳过多少字节的代码。如果条件是假，它就按这个值调整`ip`，就像这样：
 
-![Flowchart of the compiled bytecode of an if statement.](23.来回跳转/if-without-else.png)
+![Flowchart of the compiled bytecode of an if statement.](./if-without-else.png)
 
 > But we have a problem. When we’re writing the `OP_JUMP_IF_FALSE` instruction’s operand, how do we know how far to jump? We haven’t compiled the then branch yet, so we don’t know how much bytecode it contains.
 
@@ -109,7 +112,7 @@ static void ifStatement() {
 
 为了解决这个问题，我们使用了一个经典的技巧，叫作**回填（backpatching）**。我们首先生成跳转指令，并附上一个占位的偏移量操作数，我们跟踪这个半成品指令的位置。接下来，我们编译then主体。一旦完成，我们就知道要跳多远。所以我们回去将占位符替换为真正的偏移量，现在我们可以计算它了。这有点像在已编译代码的现有结构上打补丁。
 
-![A patch containing a number being sewn onto a sheet of bytecode.](23.来回跳转/patch.png)
+![A patch containing a number being sewn onto a sheet of bytecode.](./patch.png)
 
 > We encode this trick into two helper functions.
 
@@ -251,13 +254,13 @@ static void patchJump(int offset) {
 
 当条件为假时，我们会跳过then分支。如果存在else分支，`ip`就会出现在其字节码的开头处。但这还不够。下面是对应的流：
 
-![Flowchart of the compiled bytecode with the then branch incorrectly falling through to the else branch.](23.来回跳转/bad-else.png)
+![Flowchart of the compiled bytecode with the then branch incorrectly falling through to the else branch.](./bad-else.png)
 
 > If the condition is truthy, we execute the then branch like we want. But after that, execution rolls right on through into the else branch. Oops! When the condition is true, after we run the then branch, we need to jump over the else branch. That way, in either case, we only execute a single branch, like this:
 
 如果条件是真，则按照要求执行then分支。但在那之后，执行会直接转入到else分支。糟糕！当条件为真时，执行完then分支后，我们需要跳过else分支。这样，无论哪种情况，我们都只执行一个分支，像这样：
 
-![Flowchart of the compiled bytecode for an if with an else clause.](23.来回跳转/if-else.png)
+![Flowchart of the compiled bytecode for an if with an else clause.](./if-else.png)
 
 > To implement that, we need another jump from the end of the then branch.
 
@@ -368,7 +371,7 @@ static void patchJump(int offset) {
 
 完整正确的流看起来是这样的：
 
-![Flowchart of the compiled bytecode including necessary pop instructions.](23.来回跳转/full-if-else.png)
+![Flowchart of the compiled bytecode including necessary pop instructions.](./full-if-else.png)
 
 > If you trace through, you can see that it always executes a single branch and ensures the condition is popped first. All that remains is a little disassembler support.
 
@@ -456,7 +459,7 @@ static void and_(bool canAssign) {
 
 这四行代码正是产生这样的结果。流程看起来像这样：
 
-![Flowchart of the compiled bytecode of an 'and' expression.](23.来回跳转/and.png)
+![Flowchart of the compiled bytecode of an 'and' expression.](./and.png)
 
 > Now you can see why `OP_JUMP_IF_FALSE` leaves the value on top of the stack. When the left-hand side of the `and` is falsey, that value sticks around to become the result of the entire expression.
 
@@ -507,7 +510,7 @@ static void or_(bool canAssign) {
 
 当左侧值为假时，它会做一个小跳跃，跳过下一条语句。该语句会无条件跳过右侧操作数的代码。当值为真时，就会进行该跳转。流程看起来是这样的：
 
-![Flowchart of the compiled bytecode of a logical or expression.](23.来回跳转/or.png)
+![Flowchart of the compiled bytecode of a logical or expression.](./or.png)
 
 > If I’m honest with you, this isn’t the best way to do this. There are more instructions to dispatch and more overhead. There’s no good reason why `or` should be slower than `and`. But it is kind of fun to see that it’s possible to implement both operators without adding any new instructions. Forgive me my indulgences.
 
@@ -670,7 +673,7 @@ static void emitLoop(int loopStart) {
 
 这就是我们的`while`语句。它包含两个跳转——一个是有条件的前向跳转，用于在不满足条件的时候退出循环；另一个是在执行完主体代码后的无条件跳转。流程看起来如下：
 
-![Flowchart of the compiled bytecode of a while statement.](23.来回跳转/while.png)
+![Flowchart of the compiled bytecode of a while statement.](./while.png)
 
 > ## 23 . 4 For Statements
 
@@ -899,7 +902,7 @@ static void forStatement() {
 
 这很复杂，但一切都解决了。一个包含所有子句的完整循环会被编译为类似这样的流程：
 
-![Flowchart of the compiled bytecode of a for statement.](23.来回跳转/for.png)
+![Flowchart of the compiled bytecode of a for statement.](./for.png)
 
 > As with implementing `for` loops in jlox, we didn’t need to touch the runtime. It all gets compiled down to primitive control flow operations the VM already supports. In this chapter, we’ve taken a big leap forward—clox is now Turing complete. We’ve also covered quite a bit of new syntax: three statements and two expression forms. Even so, it only took three new simple instructions. That’s a pretty good effort-to-reward ratio for the architecture of our VM.
 
@@ -909,7 +912,7 @@ static void forStatement() {
 
 [^1]: 你有没有注意到，`if`关键字后面的`(`实际上没有什么用处？如果没有它，语言也会很明确，而且容易解析，比如：<BR>`if condition) print("looks weird");`<BR>结尾的`)`是有用的，因为它将条件表达式和主体分隔开。有些语言使用`then`关键字来代替。但是开头的`(`没有任何作用。它之所以存在，是因为不匹配的括号在我们人类看来很糟糕。
 [^2]: 一些指令集中有单独的“长”跳转指令，这些指令会接受更大的操作数，当你需要跳转更远的距离时可以使用。
-[^3]: 我说过我们不会使用C的`if`语句来实现Lox的控制流，但我们在这里确实使用了`if`语句来决定是否偏移指令指针。但我们并没有真正使用C语言来实现控制流。如果我们想的话，可以用纯粹的算术做到同样的事情。假设我们有一个函数`falsey()`，它接受一个Lox Value，如果是假则返回1，否则返回0。那我们可以这样实现跳转指令：<BR>![image-20220728170132199](23.来回跳转/image-20220728170132199.png)<BR>`falsey()`函数可能会使用一些控制流来处理不同的值类型，但这是该函数的实现细节，并不影响我们的虚拟机如何处理自己的控制流。
+[^3]: 我说过我们不会使用C的`if`语句来实现Lox的控制流，但我们在这里确实使用了`if`语句来决定是否偏移指令指针。但我们并没有真正使用C语言来实现控制流。如果我们想的话，可以用纯粹的算术做到同样的事情。假设我们有一个函数`falsey()`，它接受一个Lox Value，如果是假则返回1，否则返回0。那我们可以这样实现跳转指令：<BR>![image-20220728170132199](./image-20220728170132199.png)<BR>`falsey()`函数可能会使用一些控制流来处理不同的值类型，但这是该函数的实现细节，并不影响我们的虚拟机如何处理自己的控制流。
 [^4]: 我们的操作码范围中还有足够的空间，所以我们可以为隐式弹出值的条件跳转和不弹出值的条件跳转制定单独的指令。但我想尽量在书中保持简约。在你的字节码虚拟机中，值得探索添加更多的专用指令，看看它们是如何影响性能的。
 [^5]: 真的开始怀疑我对逻辑运算符使用相同的跳转指令的决定了。
 

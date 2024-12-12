@@ -1,4 +1,7 @@
-# 22.局部变量 Local Variables
+---
+title: 局部变量
+description: Local Variables
+---
 
 > And as imagination bodies forth
 > The forms of things unknown, the poet’s pen
@@ -53,7 +56,7 @@
 
 逐步执行这段示例代码，查看局部变量是如何进入和离开作用域的：
 
-![A series of local variables come into and out of scope in a stack-like fashion.](22.局部变量/scopes.png)
+![A series of local variables come into and out of scope in a stack-like fashion.](./scopes.png)
 
 > See how they fit a stack perfectly? It seems that the stack will work for storing locals at runtime. But we can go further than that. Not only do we know *that* they will be on the stack, but we can even pin down precisely *where* they will be on the stack. Since the compiler knows exactly which local variables are in scope at any point in time, it can effectively simulate the stack during compilation and note where in the stack each variable lives.
 
@@ -262,7 +265,7 @@ static void endScope() {
 
 通常我们会从解析开始，但是我们的编译器已经支持了解析和编译变量声明。我们现在已经有了`var`语句、标识符表达式和赋值语句。只是编译器假设所有的变量都是全局变量。所以，我们不需要任何新的解析支持，我们只需要将新的作用域语义与已有的代码连接起来。
 
-![The code flow within varDeclaration().](22.局部变量/declaration.png)
+![The code flow within varDeclaration().](./declaration.png)
 
 > Variable declaration parsing begins in `varDeclaration()` and relies on a couple of other functions. First, `parseVariable()` consumes the identifier token for the variable name, adds its lexeme to the chunk’s constant table as a string, and then returns the constant table index where it was added. Then, after `varDeclaration()` compiles the initializer, it calls `defineVariable()` to emit the bytecode for storing the variable’s value in the global variable hash table.
 
@@ -307,7 +310,7 @@ static void defineVariable(uint8_t global) {
 
 等等，什么？是的，就是这样。没有代码会在运行时创建局部变量。想想虚拟机现在处于什么状态。它已经执行了变量初始化表达式的代码（如果用户省略了初始化，则是隐式的`nil`），并且该值作为唯一保留的临时变量位于栈顶。我们还知道，新的局部变量会被分配到栈顶……这个值已经在那里了。因此，没有什么可做的。临时变量直接*成为*局部变量。没有比这更有效的方法了。
 
-![Walking through the bytecode execution showing that each initializer's result ends up in the local's slot.](22.局部变量/local-slots.png)
+![Walking through the bytecode execution showing that each initializer's result ends up in the local's slot.](./local-slots.png)
 
 > OK, so what’s “declaring” about? Here’s what that does:
 
@@ -708,7 +711,7 @@ static int byteInstruction(const char* name, Chunk* chunk,
 
 我们当时通过将一个变量的声明拆分为两个阶段来解决这个问题，在这里我们也要这样做：
 
-![An example variable declaration marked 'declared uninitialized' before the variable name and 'ready for use' after the initializer.](22.局部变量/phases.png)
+![An example variable declaration marked 'declared uninitialized' before the variable name and 'ready for use' after the initializer.](./phases.png)
 
 > As soon as the variable declaration begins—in other words, before its initializer—the name is declared in the current scope. The variable exists, but in a special “uninitialized” state. Then we compile the initializer. If at any point in that expression we resolve an identifier that points back to this variable, we’ll see that it is not initialized yet and report an error. After we finish compiling the initializer, we mark the variable as initialized and ready for use.
 

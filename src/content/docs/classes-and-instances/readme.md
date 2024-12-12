@@ -1,4 +1,7 @@
-# 27.类与实例 Classes and Instances
+---
+title: 27. 类与实例
+description: Classes and Instances
+---
 
 > Caring too much for objects can destroy you. Only—if you care for a thing enough, it takes on a life of its own, doesn’t it? And isn’t the whole point of things—beautiful things—that they connect you to some larger beauty?
 >
@@ -383,7 +386,7 @@ ObjClass* newClass(ObjString* name);
 
 在Lox*语言*中，用户可以定义自己的类——比如Cake和Pie——然后创建这些类的实例。从用户的角度来看，Cake实例与Pie实例是不同类型的对象。但是，从虚拟机的角度来看，用户定义的每个类都只是另一个ObjClass类型的值。同样，用户程序中的每个实例，无论它是什么类的实例，都是一个ObjInstance。这一虚拟机对象类型涵盖了所有类的实例。这两个世界之间的映射是这样的：
 
-![A set of class declarations and instances, and the runtime representations each maps to.](27.类与实例/lox-clox.png)
+![A set of class declarations and instances, and the runtime representations each maps to.](./lox-clox.png)
 
 > Got it? OK, back to the implementation. We also get our usual macros.
 
@@ -822,7 +825,7 @@ print pair.first + pair.second; // 3.
 
 
 [^1]: 那些对面向对象编程有强烈看法的人——读作“每个人”——往往认为OOP意味着一些非常具体的语言特性清单，但实际上有一个完整的空间可以探索，而每种语言都有自己的成分和配方。<BR>Self有对象但没有类。CLOS有方法，当没有把它们附加到特定的类中。C++最初没有运行时多态——没有虚方法。Python有多重继承，但Java没有。Ruby把方法附加在类上，但你也可以在单个对象上定义方法。
-[^2]: !['Klass' in a zany kidz font.](27.类与实例/klass.png)我将变量命名为“klass”，不仅仅是为了给虚拟机一种古怪的幼儿园的"Kidz Korner "感觉。它使得clox更容易被编译为C++，而C++中“class”是一个保留字。
+[^2]: !['Klass' in a zany kidz font.](./klass.png)我将变量命名为“klass”，不仅仅是为了给虚拟机一种古怪的幼儿园的"Kidz Korner "感觉。它使得clox更容易被编译为C++，而C++中“class”是一个保留字。
 [^3]: 我们可以让类声明成为表达式而不是语句——比较它们本质上是一个产生值的字面量。然后用户必须自己显式地将类绑定到一个变量，比如：`var Pie = class {}`。这有点像lambda函数，但只是针对类的。但由于我们通常希望类被命名，所以将其视为声明是有意义的。
 [^4]: “局部（Local）”类——在函数或块主体中声明的类，是一个不寻常的概念。许多语言根本不允许这一特性。但由于Lox是一种动态类型脚本语言，它会对程序的顶层代码和函数以及块的主体进行统一处理。类只是另一种声明，既然你可以在块中声明变量和函数，那你也可以在块中声明类。
 [^5]: 能够在运行时自由地向对象添加字段，是大多数动态语言和静态语言之间的一个很大的实际区别。静态类型语言通常要求显式声明字段。这样，编译器就确切知道每个实例有哪些字段。它可以利用这一点来确定每个实例所需的精确内存量，以及每个字段在内存中的偏移量。<BR>在Lox和其它动态语言中，访问字段通常是一次哈希表查询。常量时间复杂度，但仍然是相当重的。在C++这样的语言中，访问一个字段就像对指针偏移一个整数常量一样快。
@@ -832,7 +835,7 @@ print pair.first + pair.second; // 3.
 [^9]: 编译器在这里使用“属性（property）”而不是“字段（field）”，因为，请记住，Lox还允许你使用点语法来访问一个方法而不调用它。“属性”是一个通用术语，我们用来指代可以在实例上访问的任何命名实体。字段是基于实例状态的属性子集。
 [^10]: 你不能设置非字段属性，所以我认为这个指令本该是`OP_SET_FIELD`，但是我认为它与get指令一致看起来更漂亮。
 [^11]: Lox*可以*支持向其它类型的值中添加字段。这是我们的语言，我们可以做我们想做的。但这可能是个坏主意。它大大增加了实现的复杂性，从而损害了性能——例如，字符串驻留变得更加困难。<BR>此外，它还引起了关于数值的相等和同一性的复杂语义问题。如果我给数字`3`附加一个字段，那么`1+2`的结果也有这个字段吗？如果是的话，实现上如何跟踪它？如果不是，这两个结果中的“3”仍然被认为是相等的吗？
-[^12]: 栈的操作是这样的：![Popping two values and then pushing the first value back on the stack.](27.类与实例/stack.png)
+[^12]: 栈的操作是这样的：![Popping two values and then pushing the first value back on the stack.](./stack.png)
 
 
 

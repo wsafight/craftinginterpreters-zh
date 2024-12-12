@@ -7,12 +7,11 @@ export default defineConfig({
   site: "https://wsafight.github.io",
   base: "craftinginterpreters-zh",
   redirects: {
-    "/": "/craftinginterpreters-zh/introduction/readme",
-    // "/": "/introduction/readme",
+    "/": "/craftinginterpreters-zh/introduction/readme"
   },
   integrations: [
     starlight({
-      title: "手写解释器",
+      title: "手写解释器(翻译)",
       social: {
         github: "https://github.com/wsafight/craftinginterpreters-zh",
       },
@@ -89,6 +88,62 @@ export default defineConfig({
           label: "18.值类型",
           slug: "types-of-values/readme"
         },
+        {
+          label: "19.字符串",
+          slug: "strings/readme"
+        },
+        {
+          label: "20.哈希表",
+          slug: "hash-tables/readme"
+        },
+        {
+          label: "21.全局变量",
+          slug: "global-variables/readme"
+        },
+        {
+          label: "22.局部变量",
+          slug: "local-variables/readme"
+        },
+        {
+          label: "23.来回跳转",
+          slug: "jumping-back-and-forth/readme"
+        },
+        {
+          label: "24.调用和函数",
+          slug: "calls-and-functions/readme"
+        },
+        {
+          label: "25.闭包",
+          slug: "closures/readme",
+        },
+        {
+          label: "26.垃圾回收",
+          slug: "garbage-collection/readme",
+        },
+        {
+          label: "27.类与实例",
+          slug: "classes-and-instances/readme"
+        },
+        {
+          label: "28.方法和初始化器",
+          slug: "methods-and-initializers/readme"
+        },
+        {
+          label: "29.超类",
+          slug: "superclasses/readme"
+        },
+        {
+          label: "30.优化",
+          slug: "optimization/readme"
+        },
+        {
+          label: "附录1",
+          slug: "about/appendix-1"
+        },
+        {
+          label: "附录2",
+          slug: "about/appendix-2"
+        }
       ],
     }),
   ],

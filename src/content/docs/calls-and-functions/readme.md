@@ -1,4 +1,7 @@
-# 24.调用和函数 Calls and Functions
+---
+title: 24. 调用和函数
+description: Calls and Functions
+---
 
 > Any problem in computer science can be solved with another level of indirection. Except for the problem of too many layers of indirection.
 >
@@ -510,7 +513,7 @@ first();
 
 逐步执行程序，看看在每个时间点上内存中有哪些变量：
 
-![Tracing through the execution of the previous program, showing the stack of variables at each step.](24.调用和函数/calls.png)
+![Tracing through the execution of the previous program, showing the stack of variables at each step.](./calls.png)
 
 > As execution flows through the two calls, every local variable obeys the principle that any variable declared after it will be discarded before the first variable needs to be. This is true even across calls. We know we’ll be done with `c` and `d` before we are done with `a`. It seems we should be able to allocate local variables on the VM’s value stack.
 
@@ -552,7 +555,7 @@ first();
 
 这就好像是函数在更大的堆栈中得到了一个“窗口”或“帧”，它可以在其中存储局部变量。**调用帧**的位置是在运行时确定的，但在该区域内部及其相对位置上，我们知道在哪里可以找到目标。
 
-![The stack at the two points when second() is called, with a window hovering over each one showing the pair of stack slots used by the function.](24.调用和函数/window.png)
+![The stack at the two points when second() is called, with a window hovering over each one showing the pair of stack slots used by the function.](./window.png)
 
 > The historical name for this recorded location where the function’s locals start is a **frame pointer** because it points to the beginning of the function’s call frame. Sometimes you hear **base pointer**, because it points to the base stack slot on top of which all of the function’s variables live.
 
@@ -1220,7 +1223,7 @@ print 4 + sum(5, 6, 7);
 
 如果我们在调用`sum()`的`OP_CALL`指令处暂停虚拟机，栈看起来是这样的：
 
-![Stack: 4, fn sum, 5, 6, 7.](24.调用和函数/argument-stack.png)
+![Stack: 4, fn sum, 5, 6, 7.](./argument-stack.png)
 
 > Picture this from the perspective of `sum()` itself. When the compiler compiled `sum()`, it automatically allocated slot zero. Then, after that, it allocated local slots for the parameters `a`, `b`, and `c`, in order. To perform a call to `sum()`, we need a CallFrame initialized with the function being called and a region of stack slots that it can use. Then we need to collect the arguments passed to the function and get them into the corresponding slots for the parameters.
 
@@ -1230,7 +1233,7 @@ print 4 + sum(5, 6, 7);
 
 当VM开始执行`sum()`函数体时，我们需要栈窗口看起来像这样：
 
-![The same stack with the sum() function's call frame window surrounding fn sum, 5, 6, and 7.](24.调用和函数/parameter-window.png)
+![The same stack with the sum() function's call frame window surrounding fn sum, 5, 6, and 7.](./parameter-window.png)
 
 > Do you notice how the argument slots that the caller sets up and the parameter slots the callee needs are both in exactly the right order? How convenient! This is no coincidence. When I talked about each CallFrame having its own window into the stack, I never said those windows must be *disjoint*. There’s nothing preventing us from overlapping them, like this:
 
@@ -1335,7 +1338,7 @@ static bool call(ObjFunction* function, int argCount) {
 
 这里只是初始化了栈上的下一个CallFrame。其中存储了一个指向被调用函数的指针，并将调用帧的`ip`指向函数字节码的开始处。最后，它设置`slots`指针，告诉调用帧它在栈上的窗口位置。这里的算法可以确保栈中已存在的实参与函数的形参是对齐的。
 
-![The arithmetic to calculate frame->slots from stackTop and argCount.](24.调用和函数/arithmetic.png)
+![The arithmetic to calculate frame->slots from stackTop and argCount.](./arithmetic.png)
 
 > The funny little `- 1` is to account for stack slot zero which the compiler set aside for when we add methods later. The parameters start at slot one so we make the window start one slot earlier to align them with the arguments.
 >
@@ -1532,7 +1535,7 @@ Expected 0 arguments but got 2.
 
 我们把返回值压回堆栈，放在新的、较低的位置。然后我们更新`run`函数中缓存的指针，将其指向当前帧。就像我们开始调用一样，在字节码调度循环的下一次迭代中，VM会从该帧中读取`ip`，执行程序会跳回调用者，就在它离开的地方，紧挨着`OP_CALL`指令之后。
 
-![Each step of the return process: popping the return value, discarding the call frame, pushing the return value.](24.调用和函数/return.png)
+![Each step of the return process: popping the return value, discarding the call frame, pushing the return value.](./return.png)
 
 > Note that we assume here that the function *did* actually return a value, but a function can implicitly return by reaching the end of its body:
 

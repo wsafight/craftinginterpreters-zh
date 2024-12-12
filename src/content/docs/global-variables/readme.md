@@ -1,4 +1,7 @@
-# 21.全局变量 Global Variables
+---
+title: 21. 全局变量
+description: Global Variables
+---
 
 > If only there could be an invention that bottled up a memory, like scent. And it never faded, and it never got stale. And then, when one wanted it, the bottle could be uncorked, and it would be like living the moment all over again.
 >
@@ -830,7 +833,7 @@ menu.brunch(sunday).beverage = "mimosa";
 
 不过，这个问题并不像看上去那么可怕。看看解析器是如何处理这个例子的：
 
-![The 'menu.brunch(sunday).beverage = "mimosa"' statement, showing that 'menu.brunch(sunday)' is an expression.](21.全局变量/setter.png)
+![The 'menu.brunch(sunday).beverage = "mimosa"' statement, showing that 'menu.brunch(sunday)' is an expression.](./setter.png)
 
 > Even though the `.beverage` part must not be compiled as a get expression, everything to the left of the `.` is an expression, with the normal expression semantics. The `menu.brunch(sunday)` part can be compiled and executed as usual.
 
@@ -939,7 +942,7 @@ a * b = c + d;
 
 根据Lox语法，`=`的优先级最低，所以这大致应该解析为：
 
-![The expected parse, like '(a * b) = (c + d)'.](21.全局变量/ast-good.png)
+![The expected parse, like '(a * b) = (c + d)'.](./ast-good.png)
 
 > Obviously, `a * b` isn’t a valid assignment target, so this should be a syntax error. But here’s what our parser does:
 
@@ -963,7 +966,7 @@ a * b = c + d;
 
 换句话说，解析器将上面的代码看作：
 
-![The actual parse, like 'a * (b = c + d)'.](21.全局变量/ast-bad.png)
+![The actual parse, like 'a * (b = c + d)'.](./ast-bad.png)
 
 > We’ve messed up the precedence handling because `variable()` doesn’t take into account the precedence of the surrounding expression that contains the variable. If the variable happens to be the right-hand side of an infix operator, or the operand of a unary operator, then that containing expression is too high precedence to permit the `=`.
 
@@ -1175,7 +1178,7 @@ print breakfast;
 [^1]: 这是复杂的语言实现中常见的元策略。通常情况下，同一种语言特性会有多种实现技术，每种技术都针对不同的使用模式进行了优化。举例来说，与属性集可以自由修改的其它对象相比，Java Script虚拟机通常对那些使用起来像类实例对象有着更快的表示形式。C和C++编译器通常由多种方法能够根据case分支数量和case值的密集程度来编译`switch`语句。
 [^2]: 代码块的作用有点像表达式中的括号。块可以让你把“低级别的”声明语句放在只允许“高级别的”非声明语句的地方。
 [^3]: 这听起来微不足道，但是非玩具型语言的手写解析器非常大。当你有数千行代码时，如果一个实用函数可以将两行代码简化为一行代码，并使结果更易于阅读，那它就很容易被接受。
-[^4]: `OP_ADD`执行过后堆栈会少一个元素，所以它的效应是`-1`：![The stack effect of an OP_ADD instruction.](21.全局变量/stack-effect.png)
+[^4]: `OP_ADD`执行过后堆栈会少一个元素，所以它的效应是`-1`：![The stack effect of an OP_ADD instruction.](./stack-effect.png)
 [^5]: 不过，我们只是近了一步。等我们添加函数时，还会重新审视`OP_RETURN`。现在，它退出整个解释器的循环即可。
 [^6]: 据我统计，在本章末尾的`compiler.c`版本中，149条语句中有80条是表达式语句。
 [^7]: 基本上，编译器会对变量声明进行脱糖处理，如`var a;`变成`var a = nil;`，它为前者生成的代码和为后者生成的代码是相同的。

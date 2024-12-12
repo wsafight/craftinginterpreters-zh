@@ -1,4 +1,7 @@
-# 30.优化 Optimization
+---
+title: 30. 优化
+description: Optimization
+---
 
 > The evening’s the best part of the day. You’ve done your day’s work. Now you can put your feet up and enjoy it.
 >
@@ -219,7 +222,7 @@ static Entry* findEntry(Entry* entries, int capacity,
 
 因为我们是聪明的位操作者，我们知道一个更快的方法来计算一个数以2的幂为模的余数：**位掩码**。假设我们要计算229对64取模。答案是37，这在十进制中不是特别明显，但当你用二进制查看这些数字时，就会更清楚：
 
-![The bit patterns resulting from 229 % 64 = 37 and 229 & 63 = 37.](30.优化/mask.png)
+![The bit patterns resulting from 229 % 64 = 37 and 229 & 63 = 37.](./mask.png)
 
 > On the left side of the illustration, notice how the result (37) is simply the dividend (229) with the highest two bits shaved off? Those two highest bits are the bits at or to the left of the divisor’s single 1 bit.
 >
@@ -304,7 +307,7 @@ CPU喜欢位运算，因此很难在此基础上进行改进[^7]。
 
 来看看我们的修补是否值得。我调整了前面的动物学基准测试，计算它能在10秒内运行多少批的10000次调用[^8]。处理批次越多，性能越快。在我的机器上，使用未优化的代码，基准测试可以执行3192个批次。经过优化之后，这个数字跃升到了6249。
 
-![Bar chart comparing the performance before and after the optimization.](30.优化/hash-chart.png)
+![Bar chart comparing the performance before and after the optimization.](./hash-chart.png)
 
 > That’s almost exactly twice as much work in the same amount of time. We made the VM twice as fast (usual caveat: on this benchmark). That is a massive win when it comes to optimization. Usually you feel good if you can claw a few percentage points here or there. Since methods, fields, and global variables are so prevalent in Lox programs, this tiny optimization improves performance across the board. Almost every Lox program benefits.
 
@@ -343,7 +346,7 @@ CPU喜欢位运算，因此很难在此基础上进行改进[^7]。
 
 在64位机器上，我们的Value类型占用了16个字节。该结构体中有两个字段，一个类型标签和一个存储有效载荷的联合体。联合体中最大的字段是一个Obj指针和一个double值，都是8字节。为了使联合体字段与8字节边界对齐，编译器也在标签后面添加了填充：
 
-![Byte layout of the 16-byte tagged union Value.](30.优化/union.png)
+![Byte layout of the 16-byte tagged union Value.](./union.png)
 
 > That’s pretty big. If we could cut that down, then the VM could pack more values into the same amount of memory. Most computers have plenty of RAM these days, so the direct memory savings aren’t a huge deal. But a smaller representation means more Values fit in a cache line. That means fewer cache misses, which affects *speed*.
 
@@ -373,7 +376,7 @@ CPU喜欢位运算，因此很难在此基础上进行改进[^7]。
 
 在你的计算机看来，一个64位、双精度的IEEE浮点数是这样的：
 
-![Bit representation of an IEEE 754 double.](30.优化/double.png)
+![Bit representation of an IEEE 754 double.](./double.png)
 
 > - Starting from the right, the first 52 bits are the **fraction**, **mantissa**, or **significand** bits. They represent the significant digits of the number, as a binary integer.
 > - Next to that are 11 **exponent** bits. These tell you how far the mantissa is shifted away from the decimal (well, binary) point.
@@ -403,7 +406,7 @@ CPU喜欢位运算，因此很难在此基础上进行改进[^7]。
 
 每一个所有指数位置1、最高尾数位置1的double都是一个静默NaN。这就留下了52个未解释的位。我们会避开其中一个，这样我们就不会踩到Intel的“QNaN浮点不确定”值，剩下51位。这些剩余的比特可以是任何东西。我们现在说的是2,251,799,813,685,248独一无二的静默NaN位模式。
 
-![The bits in a double that make it a quiet NaN.](30.优化/nan.png)
+![The bits in a double that make it a quiet NaN.](./nan.png)
 
 > This means a 64-bit double has enough room to store all of the various different numeric floating-point values and *also* has room for another 51 bits of data that we can use however we want. That’s plenty of room to set aside a couple of bit patterns to represent Lox’s `nil`, `true`, and `false` values. But what about Obj pointers? Don’t pointers need a full 64 bits too?
 
@@ -633,7 +636,7 @@ typedef uint64_t Value;
 
 如果C支持二进制字面量就好了。但如果你做了转换，你会看到那个值是这样的：
 
-![The quiet NaN bits.](30.优化/qnan.png)
+![The quiet NaN bits.](./qnan.png)
 
 > This is exactly all of the exponent bits, plus the quiet NaN bit, plus one extra to dodge that Intel value.
 
@@ -667,7 +670,7 @@ typedef uint64_t Value;
 
 因此，我们的`nil`表示形式的所有比特位就是定义静默NaN表示形式所需的所有比特位，以及`nil`类型的标记位：
 
-![The bit representation of the nil value.](30.优化/nil.png)
+![The bit representation of the nil value.](./nil.png)
 
 > In code, we check the bits like so:
 
@@ -722,7 +725,7 @@ typedef uint64_t Value;
 
 比特位看起来是这样的：
 
-![The bit representation of the true and false values.](30.优化/bools.png)
+![The bit representation of the true and false values.](./bools.png)
 
 > To convert a C bool into a Lox Boolean, we rely on these two singleton values and the good old conditional operator.
 >
@@ -814,7 +817,7 @@ typedef uint64_t Value;
 
 如果符号位被置1，那么剩余的低比特位会存储Obj指针：
 
-![Bit representation of an Obj* stored in a Value.](30.优化/obj.png)
+![Bit representation of an Obj* stored in a Value.](./obj.png)
 
 > To convert a raw Obj pointer to a Value, we take the pointer and set all of the quiet NaN bits and the sign bit.
 
@@ -1108,7 +1111,7 @@ IEEE 754表明，这个程序应该打印“false”。对于我们原先的带�
 [^11]: 我不知道是否有CPU真正做到了捕获信号NaN并中止，规范中只是说它们*可以*。
 [^12]: 48比特位足以对262,114GB的内存进行寻找。现代操作系统也为每个进程提供了自己的地址空间，所以这应该足够了。
 [^13]: 规范的作者不喜欢类型双关，因为它使得优化变得更加困难。一个关键的优化技术是对指令进行重新排序，以填充CPU的执行管道。显然，编译器只有在重排序不会产生用户可见的影响时才可以这样做。<BR>指针使得这一点更加困难。如果两个指针指向同一个值，那么通过一个指针进行的写操作和通过另一个指针进行的读操作就不能被重新排序。但是，如果是两个*不同*类型的指针呢？如果这些指针可以指向同一个对象，那么基本上*任意*两个指针都可以成为同一个值的别名。这极大地限制了编译器可以自由地重新排列的代码量。<BR>为了避免这种情况，编译器希望采用**严格别名**——不兼容类型的指针不能指向相同的值。类型双关，从本质上来说，打破了这种假设。
-[^14]: 如果你发现自己的编译器没有对`memcpy()`进行优化，可以试试这个：![image-20221111164521148](30.优化/image-20221111164521148.png)
+[^14]: 如果你发现自己的编译器没有对`memcpy()`进行优化，可以试试这个：![image-20221111164521148](./image-20221111164521148.png)
 [^15]: 非常肯定，但不是严格保证。据我所知，没有什么可以阻止CPU产生一个NaN值，作为某些操作的结果，而且这些操作的位表示形式会与我们声明的位表示形式相冲突。但在我跨多个架构的测试中，还没有看到这种情况发生。
 [^16]: 实际上，即使该值是一个Obj指针，我们也*可以*使用最低位来存储类型标签。这是因为Obj指针总是被对齐到8字节边界，因为Obj包含一个64位的字段。这反过来意味着Obj指针的最低三位始终是0。我们可以在其中存储任何我们想要的东西，只是在解引用指针之前要将这些屏蔽掉。<BR>这是另一种被称为**指针标记**的值表示形式优化方案。
 [^17]: 在涉及到本书中的代码时，我都试图遵循法律条文，所以这一段是值得怀疑的。在优化的时候，你会遇到一个问题，那就是你不仅要突破*规范所规定*的边界，还有突破真正的编译器和芯片所允许的边界。<BR>超出规范之外是有风险的，但在这个无法无天的领域也会有回报。这样做是否值得，取决于你自己。

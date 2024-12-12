@@ -1,4 +1,7 @@
-# 20.哈希表 Hash Tables
+---
+title: 20. 哈希表
+description:  Hash Tables
+---
 
 > Hash, x. There is no definition for this word—nobody knows what hash is.
 >
@@ -42,7 +45,7 @@
 
 由于只有26个可能的变量（如果你认为下划线是一个“字母”，我猜是27个），答案很简单。声明一个具有26个元素的固定大小的数组。我们遵循传统，将每个元素称为一个**桶（bucket）**。每个元素代表一个变量，`a`从索引下标0开始。如果数组中某个字母对应的索引位置有值，那么这个键就与该值相对应。否则的话，桶是空的，该键/值对在数据结构中不存在。
 
-![A row of buckets, each labeled with a letter of the alphabet.](20.哈希表/bucket-array.png)
+![A row of buckets, each labeled with a letter of the alphabet.](./bucket-array.png)
 
 > Memory usage is great—just a single, reasonably sized array. There’s some waste from the empty buckets, but it’s not huge. There’s no overhead for node pointers, padding, or other stuff you’d get with something like a linked list or tree.
 
@@ -82,7 +85,7 @@
 
 使用数组的大小作为模数，可以让我们将键的数值范围向下适配到任意大小的数组。因此，我们可以独立于键的范围来控制桶的数量。这就解决了我们的浪费问题，但是也引入了一个新的问题。任意两个变量，如果它们的键值除以数组大小时有相同的余数，最后都会被放在同一个桶中。键会发生**冲突**。举例来说，如果我们尝试添加“jam”，它也会出现在2号桶中。
 
-!['Bagel' and 'jam' both end up in bucket index 2.](20.哈希表/collision.png)
+!['Bagel' and 'jam' both end up in bucket index 2.](./collision.png)
 
 > We have some control over this by tuning the array size. The bigger the array, the fewer the indexes that get mapped to the same bucket and the fewer the collisions that are likely to occur. Hash table implementers track this collision likelihood by measuring the table’s **load factor**. It’s defined as the number of entries divided by the number of buckets. So a hash table with five entries and an array of 16 elements has a load factor of 0.3125. The higher the load factor, the greater the chance of collisions.
 
@@ -117,7 +120,7 @@
 
 解决冲突的技术可以分为两大类。第一类是**拉链法**。每个桶中不再包含一个条目，而是包含条目的集合。在经典的实现中，每个桶都指向一个条目的链表。要查找一个条目，你要先找到它的桶，然后遍历列表，直到找到包含匹配键的条目。
 
-![An array with eight buckets. Bucket 2 links to a chain of two nodes. Bucket 5 links to a single node.](20.哈希表/chaining.png)
+![An array with eight buckets. Bucket 2 links to a chain of two nodes. Bucket 5 links to a single node.](./chaining.png)
 
 > In catastrophically bad cases where every entry collides in the same bucket, the data structure degrades into a single unsorted linked list with *O(n)* lookup. In practice, it’s easy to avoid that by controlling the load factor and how entries get scattered across buckets. In typical separate-chained hash tables, it’s rare for a bucket to have more than one or two entries.
 
@@ -160,44 +163,44 @@
 
 棘手的部分是，这些隐式的列表中可能会有多个交错在一起。让我们通过一个例子，涵盖所有有意思的情况。我们现在先不考虑值，只关心一组键。首先从一个包含8个桶的数组开始。
 
-![An array with eight empty buckets.](20.哈希表/insert-1.png)
+![An array with eight empty buckets.](./insert-1.png)
 
 > We decide to insert “bagel”. The first letter, “b” (ASCII value 98), modulo the array size (8) puts it in bucket 2.
 >
 
 我们决定插入“bagel”。第一个字母“b”（ASCII值是98），对数组大小（8）取模后，将其放入2号桶中。
 
-![Bagel goes into bucket 2.](20.哈希表/insert-2.png)
+![Bagel goes into bucket 2.](./insert-2.png)
 
 > Next, we insert “jam”. That also wants to go in bucket 2 (106 mod 8 = 2), but that bucket’s taken. We keep probing to the next bucket. It’s empty, so we put it there.
 
 接下来，我们插入“jam”。它也应该放在2号桶中（106 mod 8 = 2），但是这个桶已经被占用了。我们继续探测下一个桶。它是空的，所以我们把它放入其中。
 
-![Jam goes into bucket 3, since 2 is full.](20.哈希表/insert-3.png)
+![Jam goes into bucket 3, since 2 is full.](./insert-3.png)
 
 > We insert “fruit”, which happily lands in bucket 6.
 
 我们插入“fruit”，它愉快地落在6号桶中。
 
-![Fruit goes into bucket 6.](20.哈希表/insert-4.png)
+![Fruit goes into bucket 6.](./insert-4.png)
 
 > Likewise, “migas” can go in its preferred bucket 5.
 
 同样，“migas”可以放在其首选的5号桶中。
 
-![Migas goes into bucket 5.](20.哈希表/insert-5.png)
+![Migas goes into bucket 5.](./insert-5.png)
 
 > When we try to insert “eggs”, it also wants to be in bucket 5. That’s full, so we skip to 6. Bucket 6 is also full. Note that the entry in there is *not* part of the same probe sequence. “Fruit” is in its preferred bucket, 6. So the 5 and 6 sequences have collided and are interleaved. We skip over that and finally put “eggs” in bucket 7.
 
 当我们尝试插入“eggs”时，它也想放在5号桶中。满了，我们跳到6号桶。6号桶也满了。请注意，其中的条目并*不是*当前探测序列的一部分。“Fruit” 在其首选的6号桶中。因此，这里是5号和6号序列发生了碰撞，并交错在一起。我们跳过这个，最后把“eggs”放在7号桶中。
 
-![Eggs goes into bucket 7 because 5 and 6 are full.](20.哈希表/insert-6.png)
+![Eggs goes into bucket 7 because 5 and 6 are full.](./insert-6.png)
 
 > We run into a similar problem with “nuts”. It can’t land in 6 like it wants to. Nor can it go into 7. So we keep going. But we’ve reached the end of the array, so we wrap back around to 0 and put it there.
 
 我们在“nuts”上遇到了同样的问题。它不能按预期进入6号桶中，也不能进入7号桶中。所以我们继续前进，但是我们已经到了数组的末端，所以我们回到0并将其放入0号桶。
 
-![Nuts wraps around to bucket 0 because 6 and 7 are full.](20.哈希表/insert-7.png)
+![Nuts wraps around to bucket 0 because 6 and 7 are full.](./insert-7.png)
 
 > In practice, the interleaving turns out to not be much of a problem. Even in separate chaining, we need to walk the list to check each entry’s key because multiple keys can reduce to the same bucket. With open addressing, we need to do that same check, and that also covers the case where you are stepping over entries that “belong” to a different original bucket.
 
@@ -816,7 +819,7 @@ void tableAddAll(Table* from, Table* to);
 
 在没有冲突的情况下，这样做没问题。但是如果发生了冲突，那么条目所在的桶可能是一个或多个隐式探测序列的一部分。举例来说，下面是一个哈希表，包含三个键，它们有着相同的首选桶，2：
 
-![A hash table containing 'bagel' in bucket 2, 'biscuit' in bucket 3, and 'jam' in bucket 4.](20.哈希表/delete-1.png)
+![A hash table containing 'bagel' in bucket 2, 'biscuit' in bucket 3, and 'jam' in bucket 4.](./delete-1.png)
 
 > Remember that when we’re walking a probe sequence to find an entry, we know we’ve reached the end of a sequence and that the entry isn’t present when we hit an empty bucket. It’s like the probe sequence is a list of entries and an empty entry terminates that list.
 
@@ -830,13 +833,13 @@ void tableAddAll(Table* from, Table* to);
 
 如果我们后面尝试查找“jam”，我们会从“bagel”开始，在下一个空条目处停止，并且永远找不到它。
 
-![The 'biscuit' entry has been deleted from the hash table, breaking the chain.](20.哈希表/delete-2.png)
+![The 'biscuit' entry has been deleted from the hash table, breaking the chain.](./delete-2.png)
 
 > To solve this, most implementations use a trick called **tombstones**. Instead of clearing the entry on deletion, we replace it with a special sentinel entry called a “tombstone”. When we are following a probe sequence during a lookup, and we hit a tombstone, we *don’t* treat it like an empty slot and stop iterating. Instead, we keep going so that deleting an entry doesn’t break any implicit collision chains and we can still find entries after it.
 
 为了解决这个问题，大多数实现都使用了一个叫作**墓碑**的技巧。我们不会在删除时清除条目，而是将其替换为一个特殊的哨兵条目，称为“墓碑”[^14]。当我们在查找过程中顺着探测序列遍历时，如果遇到墓碑，我们*不会*把它当作是空槽而停止遍历。相反，我们会继续前进，这样删除一个条目不会破坏任何隐式冲突链，我们仍然可以找到它之后的条目。
 
-![Instead of deleting 'biscuit', it's replaced with a tombstone.](20.哈希表/delete-3.png)
+![Instead of deleting 'biscuit', it's replaced with a tombstone.](./delete-3.png)
 
 > The code looks like this:
 
@@ -1249,7 +1252,7 @@ ObjString* tableFindString(Table* table, const char* chars,
 [^11]: 理想的最大负载因子根据哈希函数、冲突处理策略和你将会看到的典型键集而变化。由于像Lox这样的玩具语言没有“真实世界”的数据集，所以很难对其进行优化，所以我随意地选择了75%。当你构建自己的哈希表时，请对其进行基准测试和调整。
 [^12]: 看起来我们在用`==`判断两个字符串是否相等。这行不通，对吧？相同的字符串可能会在内存的不同地方有两个副本。不要害怕，聪明的读者。我们会进一步解决这个问题。而且，奇怪的是，是一个哈希表提供了我们需要的工具。
 [^13]: 使用拉链法时，删除条目就像从链表中删除一个节点一样容易。
-[^14]: ![A tombstone enscribed 'Here lies entry biscuit → 3.75, gone but not deleted'.](20.哈希表/tombstone.png)
+[^14]: ![A tombstone enscribed 'Here lies entry biscuit → 3.75, gone but not deleted'.](./tombstone.png)
 [^15]: 在实践中，我们会首先比较两个字符串的哈希码。这样可以快速检测到几乎所有不同的字符串——如果不能，它就不是一个很好的哈希函数。但是，当两个哈希值相同时，我们仍然需要比较字符，以确保没有在不同的字符串上出现哈希冲突。
 [^16]: 我猜想“intern”是“internal（内部）”的缩写。我认为这个想法是，语言的运行时保留了这些字符串的“内部”集合，而其它字符串可以由用户创建并漂浮在内存中。当你要驻留一个字符串时，你要求运行时将该字符串添加到该内部集合，并返回一个指向该字符串的指针。<BR>不同语言在字符串驻留程度以及对用户的暴露方式上有所不同。Lua会驻留*所有*字符串，这也是clox要做的事情。Lisp、Scheme、Smalltalk、Ruby和其他语言都有一个单独的类似字符串的类型“symbol（符号）”，它是隐式驻留的。（这就是为什么他们说Ruby中的符号“更快”）Java默认会驻留常量字符串，并提供一个API让你显式地驻留传入的任何字符串。
 

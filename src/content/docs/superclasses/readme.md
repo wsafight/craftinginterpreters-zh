@@ -1,4 +1,7 @@
-# 29.超类 Superclasses
+---
+title: 超类
+description: Superclasses
+---
 
 > You can choose your friends but you sho’ can’t choose your family, an’ they’re still kin to you no matter whether you acknowledge ’em or not, and it makes you look right silly when you don’t.
 >
@@ -75,7 +78,7 @@ class Cruller < Doughnut {
 
 结果就是这个字节码：
 
-![The series of bytecode instructions for a Cruller class inheriting from Doughnut.](29.超类/inherit-stack.png)
+![The series of bytecode instructions for a Cruller class inheriting from Doughnut.](./inherit-stack.png)
 
 > Before we implement the new `OP_INHERIT` instruction, we have an edge case to detect.
 
@@ -159,7 +162,7 @@ class Cruller < Doughnut {
 
 例如，在Cruller的实例上调用`cook()`方法，jlox会这样做：
 
-![Resolving a call to cook() in an instance of Cruller means walking the superclass chain.](29.超类/jlox-resolve.png)
+![Resolving a call to cook() in an instance of Cruller means walking the superclass chain.](./jlox-resolve.png)
 
 > That’s a lot of work to perform during method *invocation* time. It’s slow, and worse, the farther an inherited method is up the ancestor chain, the slower it gets. Not a great performance story.
 
@@ -169,7 +172,7 @@ class Cruller < Doughnut {
 
 新方法则要快得多。当子类被声明时，我们将继承类的所有方法复制到子类自己的方法表中。之后，当我们*调用*某个方法时，从超类继承的任何方法都可以在子类自己的方法表中找到。继承根本不需要做额外的运行时工作。当类被声明时，工作就完成了。这意味着继承的方法和普通方法调用一样快——只需要一次哈希表查询[^3]。
 
-![Resolving a call to cook() in an instance of Cruller which has the method in its own method table.](29.超类/clox-resolve.png)
+![Resolving a call to cook() in an instance of Cruller which has the method in its own method table.](./clox-resolve.png)
 
 > I’ve sometimes heard this technique called “copy-down inheritance”. It’s simple and fast, but, like most optimizations, you get to use it only under certain constraints. It works in Lox because Lox classes are *closed*. Once a class declaration is finished executing, the set of methods for that class can never change.
 
@@ -520,7 +523,7 @@ class Cruller < Doughnut {
 
 `super.finish("icing")`发出的字节码看起来像是这样的：
 
-![The series of bytecode instructions for calling super.finish().](29.超类/super-instructions.png)
+![The series of bytecode instructions for calling super.finish().](./super-instructions.png)
 
 > The first three instructions give the runtime access to the three pieces of information it needs to perform the super access:
 
@@ -734,7 +737,7 @@ static void super_(bool canAssign) {
 
 在我们优化的指令中，事情有点被打乱：
 
-![The series of bytecode instructions for calling super.finish() using OP_SUPER_INVOKE.](29.超类/super-invoke.png)
+![The series of bytecode instructions for calling super.finish() using OP_SUPER_INVOKE.](./super-invoke.png)
 
 > Now resolving the superclass method is part of the *invocation*, so the arguments need to already be on the stack at the point that we look up the method. This means the superclass object is on top of the arguments.
 

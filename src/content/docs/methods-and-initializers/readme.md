@@ -1,4 +1,7 @@
-# 28.方法和初始化器 Methods and Initializers
+---
+title: 28. 方法和初始化器
+description: Methods and Initializers
+---
 
 > When you are on the dancefloor, there is nothing to do but dance.
 >
@@ -239,7 +242,7 @@ class Brunch {
 
 鉴于此，下面是编译器生成的内容以及这些指令在运行时如何影响堆栈：
 
-![The series of bytecode instructions for a class declaration with two methods.](28.方法和初始化器/method-instructions.png)
+![The series of bytecode instructions for a class declaration with two methods.](./method-instructions.png)
 
 > All that remains for us is to implement the runtime for that new `OP_METHOD` instruction.
 
@@ -635,7 +638,7 @@ var eggs = brunch.eggs;
 
 下面是虚拟机执行`brunch.eggs`表达式的`bindMethod()`调用时发生的情况：
 
-![The stack changes caused by bindMethod().](28.方法和初始化器/bind-method.png)
+![The stack changes caused by bindMethod().](./bind-method.png)
 
 > That’s a lot of machinery under the hood, but from the user’s perspective, they simply get a function that they can call.
 
@@ -823,7 +826,7 @@ scone.topping("berries", "cream");
 
 我们像这样计算存储接收器的槽：
 
-![Skipping over the argument stack slots to find the slot containing the closure.](28.方法和初始化器/closure-slot.png)
+![Skipping over the argument stack slots to find the slot containing the closure.](./closure-slot.png)
 
 > The `-argCount` skips past the arguments and the `- 1` adjusts for the fact that `stackTop` points just *past* the last used stack slot.
 
@@ -1000,7 +1003,7 @@ Brunch("eggs", "coffee");
 
 当VM执行对`Brunch()`的调用时，情况是这样的：
 
-![The aligned stack windows for the Brunch() call and the corresponding init() method it forwards to.](28.方法和初始化器/init-call-frame.png)
+![The aligned stack windows for the Brunch() call and the corresponding init() method it forwards to.](./init-call-frame.png)
 
 > Any arguments passed to the class when we called it are still sitting on the stack above the instance. The new CallFrame for the `init()` method shares that stack window, so those arguments implicitly get forwarded to the initializer.
 
@@ -1414,7 +1417,7 @@ static bool invokeFromClass(ObjClass* klass, ObjString* name,
 
 如果你现在启动虚拟机并运行一个调用方法的小程序，你应该会看到和以前完全相同的行为。但是，如果我们的工作做得好，*性能*应该会大大提高。我写了一个小小的微基准测试，执行每批10000次方法调用。然后测试在10秒钟内可以执行多少个批次。在我的电脑上，如果没有新的`OP_INVOKE`指令，它完成了1089个批次。通过新的优化，它在相同的时间中完成了8324个批次。速度提升了7.6倍，对于编程语言优化来说，这是一个巨大的改进[^15]。
 
-![Bar chart comparing the two benchmark results.](28.方法和初始化器/benchmark.png)
+![Bar chart comparing the two benchmark results.](./benchmark.png)
 
 > ### 28 . 5 . 1 Invoking fields
 
@@ -1504,7 +1507,7 @@ oops.field();
 [^7]: 已绑定方法是第一类值，所以他们可以把它存储在变量中，传递给函数，以及用它做“值”可做的事情。
 [^8]: 解析器函数名称后面的下划线是因为`this`是C++中的一个保留字，我们支持将clox编译为C++。
 [^9]: 当然，Lox确实允许外部代码之间访问和修改一个实例的字段，而不需要通过实例的方法。这与Ruby和Smalltalk不同，后者将状态完全封装在对象中。我们的玩具式脚本语言，唉，不那么有原则。
-[^10]: 就好像初始化器被隐式地包装在这样的一段代码中：<BR>![image-20220929122619800](28.方法和初始化器/image-20220929122619800.png)<BR>注意`init()`返回的值是如何被丢弃的。
+[^10]: 就好像初始化器被隐式地包装在这样的一段代码中：<BR>![image-20220929122619800](./image-20220929122619800.png)<BR>注意`init()`返回的值是如何被丢弃的。
 [^11]: 我承认，“软盘”对于当前一代程序员来说，可能不再是一个有用的大小参考。也许我应该说“几条推特”之类的。
 [^12]: 如果你花足够的时间观察字节码虚拟机的运行，你会发现它经常一次次地执行同一系列的字节码指令。一个经典的优化技术是定义新的单条指令，称为**超级指令**，它将这些指令融合到具有与整个序列相同行为的单一指令。<BR>在字节码解释器中，最大的性能消耗之一是每个指令的解码和调度的开销。将几个指令融合在一起可以消除其中的一些问题。<BR>难点在于确定*哪些*指令序列足够常见，并可以从这种优化中受益。每条新的超级指令都要求有一个操作码供自己使用，而这些操作码的数量是有限的。如果添加太多，你就需要对操作码进行更长的编码，这就增加了代码的大小，使得所有指令的解码速度变慢。
 [^13]: 你应该可以猜到，我们将这段代码拆分成一个单独的函数，是因为我们稍后会复用它——`super`调用中。

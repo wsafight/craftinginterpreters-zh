@@ -1,4 +1,6 @@
-# III.A BYTECODE VIRTUAL MACHINE
+---
+title: III.A BYTECODE VIRTUAL MACHINE
+---
 
 > Our Java interpreter, jlox, taught us many of the fundamentals of programming languages, but we still have much to learn. First, if you run any interesting Lox programs in jlox, you’ll discover it’s achingly slow. The style of interpretation it uses—walking the AST directly—is good enough for some real-world uses, but leaves a lot to be desired for a general-purpose scripting language.
 

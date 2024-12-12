@@ -1,14 +1,11 @@
-# 附录II Appendix II
-
-> For your edification, here is the code produced by [the little script we built](http://www.craftinginterpreters.com/representing-code.html#metaprogramming-the-trees) to automate generating the syntax tree classes for jlox.
+---
+title: 附录II
+description:  Appendix II
+---
 
 为了方便你们学习，下面是我们为自动生成jlox语法树类而[构建的小脚本](http://www.craftinginterpreters.com/representing-code.html#metaprogramming-the-trees)所产生的代码。
 
-> ## A2 . 1 Expressions
-
 ## A2.1 表达式
-
-> Expressions are the first syntax tree nodes we see, introduced in “[Representing Code](http://www.craftinginterpreters.com/representing-code.html)”. The main Expr class defines the visitor interface used to dispatch against the specific expression types, and contains the other expression subclasses as nested classes.
 
 表达式是我们看到的第一个语法树节点，在“表示代码”中介绍过。主要的Expr类定义了用于针对特定表达式类型进行调度的访问者接口，并将其它表达式子类作为嵌套类包含其中。
 
@@ -41,9 +38,7 @@ abstract class Expr {
 }
 ```
 
-### A2 . 1 . 1 Assign expression
-
-> Variable assignment is introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#assignment)”.
+### A2.1.1 赋值表达式
 
 变量赋值在“表达式与状态”中介绍过。
 
@@ -66,11 +61,7 @@ abstract class Expr {
   }
 ```
 
-> ### A2 . 1 . 2 Binary expression
-
 ### A2.1.2 Binary表达式
-
-> Binary operators are introduced in “[Representing Code](http://www.craftinginterpreters.com/representing-code.html)”.
 
 二元运算符在“表示代码”中介绍过。
 
@@ -95,9 +86,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 3 Call expression
-
-> Function call expressions are introduced in “[Functions](http://www.craftinginterpreters.com/functions.html#function-calls)”.
+### A2.1.3 调用表达式
 
 函数调用语句在“函数”中介绍过。
 
@@ -122,7 +111,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 4 Get expression
+### A2.1.4 get 表达式
 
 > Property access, or “get” expressions are introduced in “[Classes](http://www.craftinginterpreters.com/classes.html#properties-on-instances)”.
 
@@ -147,9 +136,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 5 Grouping expression
-
-> Using parentheses to group expressions is introduced in “[Representing Code](http://www.craftinginterpreters.com/representing-code.html)”.
+### A2.1.5 分组表达式
 
 使用括号进行分组的表达式在“表示代码”中介绍过。
 
@@ -170,9 +157,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 6 Literal expression
-
-> Literal value expressions are introduced in “[Representing Code](http://www.craftinginterpreters.com/representing-code.html)”.
+### A2.1.6 字面量值表达
 
 字面量值表达式在“表示代码”中介绍过。
 
@@ -193,9 +178,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 7 Logical expression
-
-> The logical `and` and `or` operators are introduced in “[Control Flow](http://www.craftinginterpreters.com/control-flow.html#logical-operators)”.
+### A2.1.7 逻辑表达式
 
 逻辑运算符`and`和`or`在“控制流”中介绍过。
 
@@ -220,9 +203,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 8 Set expression
-
-> Property assignment, or “set” expressions are introduced in “[Classes](http://www.craftinginterpreters.com/classes.html#properties-on-instances)”.
+### A2.1.8 set 表达式
 
 属性赋值，或者叫“set”表达式，在“类”中介绍过。
 
@@ -247,9 +228,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 9 Super expression
-
-> The `super` expression is introduced in “[Inheritance](http://www.craftinginterpreters.com/inheritance.html#calling-superclass-methods)”.
+### A2.1.9 super 表达式
 
 `super`表达式在“继承”中介绍过。
 
@@ -272,9 +251,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 10 This expression
-
-> The `this` expression is introduced in “[Classes](http://www.craftinginterpreters.com/classes.html#this)”.
+### A2.1.10 This 表达式
 
 `this`表达式在“类”中介绍过。
 
@@ -295,9 +272,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 11 Unary expression
-
-> Unary operators are introduced in “[Representing Code](http://www.craftinginterpreters.com/representing-code.html)”.
+### A2.1.11 一元表达式
 
 一元运算符在“表示代码”中介绍过。
 
@@ -320,9 +295,7 @@ abstract class Expr {
   }
 ```
 
-### A2 . 1 . 12 Variable expression
-
-> Variable access expressions are introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#variable-syntax)”.
+### A2.1.12 变量表达式
 
 变量访问表达式在“语句和状态”中介绍过。
 
@@ -343,11 +316,7 @@ abstract class Expr {
   }
 ```
 
-> ## A2 . 2 Statements
-
 ## A2.2 语句
-
-> Statements form a second hierarchy of syntax tree nodes independent of expressions. We add the first couple of them in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html)”.
 
 语句形成了独立于表达式的第二个语法树节点层次。我们在“声明和状态”中添加了前几个。
 
@@ -377,7 +346,7 @@ abstract class Stmt {
 }
 ```
 
-### A2 . 2 . 1 Block statement
+### A2.2.1 块语句
 
 > The curly-braced block statement that defines a local scope is introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#block-syntax-and-semantics)”.
 
@@ -399,6 +368,7 @@ abstract class Stmt {
     final List<Stmt> statements;
   }
 ```
+
 
 ### A2 . 2 . 2 Class statement
 
@@ -429,9 +399,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 3 Expression statement
-
-> The expression statement is introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#statements)”.
+### A2.2.3 Expression statement
 
 表达式语句在“语句和状态”中介绍过。
 
@@ -452,9 +420,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 4 Function statement
-
-> Function declarations are introduced in, you guessed it, “[Functions](http://www.craftinginterpreters.com/functions.html#function-declarations)”.
+### A2.2.4 Function statement
 
 函数声明是在“函数”中介绍的。
 
@@ -479,9 +445,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 5 If statement
-
-> The `if` statement is introduced in “[Control Flow](http://www.craftinginterpreters.com/control-flow.html#conditional-execution)”.
+### A2.2.5 If statement
 
 `if`语句在“控制流”中介绍过。
 
@@ -506,9 +470,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 6 Print statement
-
-> The `print` statement is introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#statements)”.
+### A2.2.6 Print statement
 
 `print`语句在“语句和状态”中介绍过。
 
@@ -529,9 +491,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 7 Return statement
-
-> You need a function to return from, so `return` statements are introduced in “[Functions](http://www.craftinginterpreters.com/functions.html#return-statements)”.
+### A2.2.7 Return statement
 
 你需要一个函数才能返回，所以`return`语句是在“函数”中介绍的。
 
@@ -554,9 +514,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 8 Variable statement
-
-> Variable declarations are introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#variable-syntax)”.
+### A2.2.8 Variable statement
 
 变量声明在“语句和状态”中介绍过。
 
@@ -579,9 +537,7 @@ abstract class Stmt {
   }
 ```
 
-### A2 . 2 . 9 While statement
-
-> The `while` statement is introduced in “[Control Flow](http://www.craftinginterpreters.com/control-flow.html#while-loops)”.
+### A2.2.9 While statement
 
 `while`语句在“控制流”中介绍过。
 

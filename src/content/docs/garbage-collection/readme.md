@@ -1,4 +1,7 @@
-# 26.垃圾回收 Garbage Collection
+---
+title: 26. 垃圾回收
+description: Garbage Collection
+---
 
 > I wanna, I wanna,
 > I wanna, I wanna,
@@ -90,13 +93,13 @@ fun makeClosure() {
 
 假设我们在标记的行上暂停并运行垃圾回收器。当回收器完成、程序恢复时，它将会调用闭包，然后输出`"data"`。所以回收器需要*不释放*那个字符串。但当我们暂停程序时，栈是这样的：
 
-![The stack, containing only the script and closure.](26.垃圾回收/stack.png)
+![The stack, containing only the script and closure.](./stack.png)
 
 > The `"data"` string is nowhere on it. It has already been hoisted off the stack and moved into the closed upvalue that the closure uses. The closure itself is on the stack. But to get to the string, we need to trace through the closure and its upvalue array. Since it *is* possible for the user’s program to do that, all of these indirectly accessible objects are also considered reachable.
 
 `"data"`字符串并不在上面。它已经被从栈中提取出来，并移动到闭包所使用的关闭上值中。闭包本身在栈上。但是要得到字符串，我们需要跟踪闭包及其上值数组。因为用户的程序可能会这样做，所有这些可以间接访问的对象也被认为是可达的。
 
-![All of the referenced objects from the closure, and the path to the 'data' string from the stack.](26.垃圾回收/reachable.png)
+![All of the referenced objects from the closure, and the path to the 'data' string from the stack.](./reachable.png)
 
 > This gives us an inductive definition of reachability:
 
@@ -149,7 +152,7 @@ fun makeClosure() {
 
 它看起来像是这样的[^4]：
 
-![Starting from a graph of objects, first the reachable ones are marked, the remaining are swept, and then only the reachable remain.](26.垃圾回收/mark-sweep.png)
+![Starting from a graph of objects, first the reachable ones are marked, the remaining are swept, and then only the reachable remain.](./mark-sweep.png)
 
 > That’s what we’re gonna implement. Whenever we decide it’s time to reclaim some bytes, we’ll trace everything and mark all the reachable objects, free what didn’t get marked, and then resume the user’s program.
 >
@@ -679,14 +682,14 @@ void markCompilerRoots() {
 
 为了帮助我们这些愚蠢的人类理解这个复杂的过程，虚拟机专家们想出了一个称为**三色抽象**的比喻。每个对象都有一个概念上的“颜色”，用于追踪对象处于什么状态，以及还需要做什么工作[^9]。
 
-> - **![A white circle.](26.垃圾回收/white.png) White:** At the beginning of a garbage collection, every object is white. This color means we have not reached or processed the object at all.
-> - **![A gray circle.](26.垃圾回收/gray.png) Gray:** During marking, when we first reach an object, we darken it gray. This color means we know the object itself is reachable and should not be collected. But we have not yet traced *through* it to see what *other* objects it references. In graph algorithm terms, this is the *worklist*—the set of objects we know about but haven’t processed yet.
-> - **![A black circle.](26.垃圾回收/black.png) Black:** When we take a gray object and mark all of the objects it references, we then turn the gray object black. This color means the mark phase is done processing that object.
+> - **![A white circle.](./white.png) White:** At the beginning of a garbage collection, every object is white. This color means we have not reached or processed the object at all.
+> - **![A gray circle.](./gray.png) Gray:** During marking, when we first reach an object, we darken it gray. This color means we know the object itself is reachable and should not be collected. But we have not yet traced *through* it to see what *other* objects it references. In graph algorithm terms, this is the *worklist*—the set of objects we know about but haven’t processed yet.
+> - **![A black circle.](./black.png) Black:** When we take a gray object and mark all of the objects it references, we then turn the gray object black. This color means the mark phase is done processing that object.
 >
 
-* **![A white circle.](26.垃圾回收/white.png) 白色:** 在垃圾回收的开始阶段，每个对象都是白色的。这种颜色意味着我们根本没有达到或处理该对象。
-* **![A gray circle.](26.垃圾回收/gray.png) 灰色:** 在标记过程中，当我们第一次达到某个对象时，我们将其染为灰色。这种颜色意味着我们知道这个对象本身是可达的，不应该被收集。但我们还没有*通过*它来跟踪它引用的*其它*对象。用图算法的术语来说，这就是*工作列表（worklist）*——我们知道但还没有被处理的对象集合。
-* **![A black circle.](26.垃圾回收/black.png) 黑色:** 当我们接受一个灰色对象，并将其引用的所有对象全部标记后，我们就把这个灰色对象变为黑色。这种颜色意味着标记阶段已经完成了对该对象的处理。
+* **![A white circle.](./white.png) 白色:** 在垃圾回收的开始阶段，每个对象都是白色的。这种颜色意味着我们根本没有达到或处理该对象。
+* **![A gray circle.](./gray.png) 灰色:** 在标记过程中，当我们第一次达到某个对象时，我们将其染为灰色。这种颜色意味着我们知道这个对象本身是可达的，不应该被收集。但我们还没有*通过*它来跟踪它引用的*其它*对象。用图算法的术语来说，这就是*工作列表（worklist）*——我们知道但还没有被处理的对象集合。
+* **![A black circle.](./black.png) 黑色:** 当我们接受一个灰色对象，并将其引用的所有对象全部标记后，我们就把这个灰色对象变为黑色。这种颜色意味着标记阶段已经完成了对该对象的处理。
 
 > In terms of that abstraction, the marking process now looks like this:
 
@@ -709,7 +712,7 @@ void markCompilerRoots() {
 
 我发现把它可视化很有帮助。你有一个对象网络，对象之间有引用。最初，它们都是小白点。旁边是一些虚拟机的传入边，这些边指向根。这些根变成了灰色。然后每个灰色对象的兄弟节点变成灰色，而该对象本身变成黑色。完整的效果是一个灰色波前穿过图，在它后面留下一个可达的黑色对象区域。不可达对象不会被波前触及，并保持白色。
 
-![A gray wavefront working through a graph of nodes.](26.垃圾回收/tricolor-trace.png)
+![A gray wavefront working through a graph of nodes.](./tricolor-trace.png)
 
 > At the end, you’re left with a sea of reached, black objects sprinkled with islands of white objects that can be swept up and freed. Once the unreachable objects are freed, the remaining objects—all black—are reset to white for the next garbage collection cycle.
 
@@ -1040,7 +1043,7 @@ static void sweep() {
 
 我知道这有点像是一堆代码和指针的诡计，不过一旦你完成了，就没什么好说的。外层的`while`循环会遍历堆中每个对象组成的链表，检查它们的标记位。如果某个对象被标记（黑色），我们就不管它，继续进行。如果它没有被标记（白色），我们将它从链表中断开，并使用我们已经写好的`freeObject()`函数释放它。
 
-![A recycle bin full of bits.](26.垃圾回收/unlink.png)
+![A recycle bin full of bits.](./unlink.png)
 
 > Most of the other code in here deals with the fact that removing a node from a singly linked list is cumbersome. We have to continuously remember the previous node so we can unlink its next pointer, and we have to handle the edge case where we are freeing the first node. But, otherwise, it’s pretty simple—delete every node in a linked list that doesn’t have a bit set in it.
 
@@ -1192,7 +1195,7 @@ void tableRemoveWhite(Table* table) {
   
   考虑一下，一个程序的两次运行都花费了10秒。第一次运行时，GC启动了一次，并在`collectGarbage()`中花费了整整1秒钟进行了一次大规模的回收。在第二次运行中，GC被调用了五次，每次调用1/5秒。回收所花费的总时间仍然是1秒，所以这两种情况下的吞吐量都是90%。但是在第二次运行中，延迟只有1/5秒，比第一次少了5倍[^16]。
 
-![A bar representing execution time with slices for running user code and running the GC. The largest GC slice is latency. The size of all of the user code slices is throughput.](26.垃圾回收/latency-throughput.png)
+![A bar representing execution time with slices for running user code and running the GC. The largest GC slice is latency. The size of all of the user code slices is throughput.](./latency-throughput.png)
 
 > If you like analogies, imagine your program is a bakery selling fresh-baked bread to customers. Throughput is the total number of warm, crusty baguettes you can serve to customers in a single day. Latency is how long the unluckiest customer has to wait in line before they get served.
 

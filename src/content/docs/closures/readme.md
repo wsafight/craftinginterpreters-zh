@@ -1,4 +1,7 @@
-# 25.闭包 Closures
+---
+title: 25. 闭包
+description: Closures
+---
 
 > As the man said, for every complex problem there’s a simple solution, and it’s wrong.
 >
@@ -47,7 +50,7 @@ closure();
 
 外层函数`makeClosure()`声明了一个变量`local`。它还创建了一个内层函数`closure()`，用于捕获该变量。然后`makeClosure()`返回对该内层函数的引用。因为闭包要在保留局部变量的同时进行退出，所以`local`必须比创建它的函数调用存活更长的时间。
 
-![A local variable flying away from the stack.](25.闭包/flying.png)
+![A local variable flying away from the stack.](./flying.png)
 
 > We could solve this problem by dynamically allocating memory for all local variables. That’s what jlox does by putting everything in those Environment objects that float around in Java’s heap. But we don’t want to. Using a stack is *really* fast. Most local variables are *not* captured by closures and do have stack semantics. It would suck to make all of those slower for the benefit of the rare local that is captured.
 
@@ -99,7 +102,7 @@ bagel();
 
 我们会逐步来捕获变量，但良好的第一步是定义对象表示形式。我们现有的ObjFunction类型表示了函数声明的“原始”编译时状态，因为从同一个声明中创建的所有闭包都共享相同的代码和常量。在运行时，当我们执行函数声明时，我们将ObjFunction包装进一个新的ObjClosure结构体中。后者有一个对底层裸函数的引用，以及该函数关闭的变量的运行时状态[^4]。
 
-![An ObjClosure with a reference to an ObjFunction.](25.闭包/obj-closure.png)
+![An ObjClosure with a reference to an ObjFunction.](./obj-closure.png)
 
 > We’ll wrap every function in an ObjClosure, even if the function doesn’t actually close over and capture any surrounding local variables. This is a little wasteful, but it simplifies the VM because we can always assume that the function we’re calling is an ObjClosure. That new struct starts out like this:
 
@@ -521,7 +524,7 @@ fun outer() {
 
 编译器和运行时会合力在内存中构建一组这样的对象：
 
-![The object graph of the stack, ObjClosure, ObjFunction, and upvalue array.](25.闭包/open-upvalue.png)
+![The object graph of the stack, ObjClosure, ObjFunction, and upvalue array.](./open-upvalue.png)
 
 > That might look overwhelming, but fear not. We’ll work our way through it. The important part is that upvalues serve as the layer of indirection needed to continue to find a captured local variable even after it moves off the stack. But before we get to all that, let’s focus on compiling captured variables.
 
@@ -806,7 +809,7 @@ value
 
 下面，我为你绘制了执行流程：
 
-![Tracing through the previous example program.](25.闭包/execution-flow.png)
+![Tracing through the previous example program.](./execution-flow.png)
 
 > See how `x` is popped before it is captured  and then later accessed ? We really have two problems:
 
@@ -826,7 +829,7 @@ value
 
 解决方案是允许闭包捕获局部变量或紧邻函数中*已有的上值*。如果一个深度嵌套的函数引用了几跳之外声明的局部变量，我们让每个函数捕获一个上值，供下一个函数抓取，从而穿透所有的中间函数。
 
-![An upvalue in inner() points to an upvalue in middle(), which points to a local variable in outer().](25.闭包/linked-upvalues.png)
+![An upvalue in inner() points to an upvalue in middle(), which points to a local variable in outer().](./linked-upvalues.png)
 
 > In the above example, `middle()` captures the local variable `x` in the immediately enclosing function `outer()` and stores it in its own upvalue. It does this even though `middle()` itself doesn’t reference `x`. Then, when the declaration of `inner()` executes, its closure grabs the *upvalue* from the ObjClosure for `middle()` that captured `x`. A function captures—either a local or upvalue—*only* from the immediately surrounding function, which is guaranteed to still be around at the point that the inner function declaration executes.
 
@@ -876,7 +879,7 @@ value
 
 在解析`x`的时候，走一遍原始的例子可能会有帮助：
 
-![Tracing through a recursive call to resolveUpvalue().](25.闭包/recursion.png)
+![Tracing through a recursive call to resolveUpvalue().](./recursion.png)
 
 > Note that the new call to `addUpvalue()` passes `false` for the `isLocal` parameter. Now you see that that flag controls whether the closure captures a local variable or an upvalue from the surrounding function.
 >
@@ -1628,7 +1631,7 @@ VM拥有该列表，因此头指针放在VM主结构体中。
 
 它应该产生如下所示的一系列链接的上值：
 
-![Three upvalues in a linked list.](25.闭包/linked-list.png)
+![Three upvalues in a linked list.](./linked-list.png)
 
 > Whenever we close over a local variable, before creating a new upvalue, we look for an existing one in the list.
 
@@ -1764,7 +1767,7 @@ static void closeUpvalues(Value* last) {
 
 但是已经有一个中间层在起作用了——这些指令对`location`指针解引用以获取变量的值。当变量从栈移动到`closed`字段时，我们只需将`location`更新为ObjUpvalue*自己的*`closed`字段。
 
-![Moving a value from the stack to the upvalue's 'closed' field and then pointing the 'value' field to it.](25.闭包/closing.png)
+![Moving a value from the stack to the upvalue's 'closed' field and then pointing the 'value' field to it.](./closing.png)
 
 > We don’t need to change how `OP_GET_UPVALUE` and `OP_SET_UPVALUE` are interpreted at all. That keeps them simple, which in turn keeps them fast. We do need to add the new field to ObjUpvalue, though.
 
