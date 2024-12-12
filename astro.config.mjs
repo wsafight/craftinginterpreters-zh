@@ -11,7 +11,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: "手撸解释器教程",
+      title: "手写解释器",
       social: {
         github: "https://github.com/wsafight/craftinginterpreters-zh",
       },
