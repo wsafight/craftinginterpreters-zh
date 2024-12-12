@@ -7,7 +7,8 @@ export default defineConfig({
   site: "https://wsafight.github.io",
   base: "craftinginterpreters-zh",
   redirects: {
-    "/": "/craftinginterpreters-zh/business/currency",
+    "/": "/craftinginterpreters-zh/introduction/readme",
+    // "/": "/introduction/readme",
   },
   integrations: [
     starlight({
@@ -17,44 +18,79 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: '',
-          items: [
-            { label: "简单货币格式化", slug: "business/currency" },
-            {
-              label: "通过 Dinero 和 Intl 处理货币数据",
-              slug: "business/dinero",
-            },
-            {
-              label: "文件大小格式化 (简单版)",
-              slug: "business/format-file-size",
-            },
-            { label: "文件格式化库 filesize", slug: "business/filesize" },
-            { label: "根据数组构建树", slug: "business/build-tree" },
-            { label: "树组件查询", slug: "business/array-tree-filter" },
-            { label: "计算博客阅读时长", slug: "business/reading-time" },
-            {
-              label: "根据背景色自适应文本颜色",
-              slug: "business/contrast-text-color",
-            },
-            { label: "输入错误提示 —— 模糊集", slug: "business/fuzzy-set" },
-            { label: "阿拉伯数字与中文数字的相互转换", slug: "business/nzh" },
-            { label: "网页公式排版工具 KaTeX", slug: "business/katex" },
-            { label: "颜色排序算法", slug: "business/color-sort" },
-            {
-              label: "交互式医学图像工具 Cornerstone",
-              slug: "business/cornerstone",
-            },
-            { label: "快速制作出响应式邮件的框架 Mjml", slug: "business/mjml" },
-            { label: "超长定时器 long-timeout", slug: "business/long-timeout" },
-            {
-              label: "基于内存的全文搜索引擎 MiniSearch",
-              slug: "business/mini-search",
-            },
-            { label: "机器人工具集合", slug: "business/robot-tools" },
-          ],
+          label: "01.前言",
+          slug: "introduction/readme",
+        },
+        {
+          label: "02.领土地图",
+          slug: "a-map-of-the-territory/readme",
+        },
+        {
+          label: "03.Lox 语言",
+          slug: "the-lox-language/readme",
+        },
+        {
+          label: "04.扫描",
+          slug: "scanning/readme",
+        },
+        {
+          label: "05.表示代码",
+          slug: "representing-code/readme",
+        },
+        {
+          label: '06.解析表达式',
+          slug: "parsing-expressions/readme"
+        },
+        {
+          label: "07.表达式求值",
+          slug: "evaluating-expressions/readme"
+        },
+        {
+          label: "08.声明和状态",
+          slug: "statements-and-state/readme"
+        },
+        {
+          label: "09.控制流",
+          slug: "control-flow/readme"
+        },
+        {
+          label: "10.函数",
+          slug: "functions/readme"
+        },
+        {
+          label: "11.解析与绑定",
+          slug: "resolving-and-binding/readme"
+        },
+        {
+          label: "12.类",
+          slug: "classes/readme"
+        },
+        {
+          label: "13.继承",
+          slug: "inheritance/readme"
+        },
+        {
+          label: "14.字节码块",
+          slug: "chunks-of-bytecode/readme"
+        },
+        {
+          label: "15.虚拟机",
+          slug: "a-virtual-machine/readme"
+        },
+        {
+          label: "16.按需扫描",
+          slug: "scanning-on-demand/readme"
+        },
+        {
+          label: "17.编译表达式",
+          slug: "compiling-expressions/readme"
+        },
+        {
+          label: "18.值类型",
+          slug: "types-of-values/readme"
         },
       ],
     }),
   ],
-  compressHTML: true
+  compressHTML: true,
 });
