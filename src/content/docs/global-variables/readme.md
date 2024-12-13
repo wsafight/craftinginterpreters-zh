@@ -13,7 +13,7 @@ description: Global Variables
 
 但它也很慢。每次进入一个代码块或调用一个函数时，都要分配一个新的哈希表，这不是通往快速虚拟机的道路。鉴于很多代码都与使用变量有关，如果变量操作缓慢，一切都会变慢。对于 clox，我们会通过对局部变量使用更有效的策略来改善这一点，但全局变量不那么容易优化[^1]。
 
-This is a common meta-strategy in sophisticated language implementations. Often, the same language feature will have multiple implementation techniques, each tuned for different use patterns. For example, JavaScript VMs often have a faster representation for objects that are used more like instances of classes compared to other objects whose set of properties is more freely modified. C and C++ compilers usually have a variety of ways to compile `switch` statements based on the number of cases and how densely packed the case values are.
+这是复杂语言实现中常见的元策略。通常，相同的语言特性会有多种实现技术，每种技术都针对不同的使用模式进行调整。例如，与其他属性集可以更自由修改的对象相比，JavaScript VM 通常可以更快地表示更像类实例的对象。C 和 C++ 编译器通常有多种方法来编译“switch”语句，具体取决于 case 的数量以及 case 值的密集程度。
 
 快速复习一下 Lox 语义：Lox 中的全局变量是“后期绑定”的，或者说是动态解析的。这意味着，你可以在全局变量被定义之前，编译引用它的一大块代码。只要代码在定义发生之前没有执行，就没有问题。在实践中，这意味着你可以在函数的主体中引用后面的变量。
 
