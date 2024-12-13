@@ -1,9 +1,9 @@
 ---
-title: 附录II
+title: 附录 II
 description:  Appendix II
 ---
 
-为了方便你们学习，下面是我们为自动生成jlox语法树类而[构建的小脚本](http://www.craftinginterpreters.com/representing-code.html#metaprogramming-the-trees)所产生的代码。
+为了方便你们学习，下面是我们为自动生成jlox语法树类而[构建的小脚本](../../representing-code/readme/#522-%E8%8A%82%E7%82%B9%E6%A0%91%E5%85%83%E7%BC%96%E7%A8%8B)所产生的代码。
 
 ## A2.1 表达式
 
@@ -348,8 +348,6 @@ abstract class Stmt {
 
 ### A2.2.1 块语句
 
-> The curly-braced block statement that defines a local scope is introduced in “[Statements and State](http://www.craftinginterpreters.com/statements-and-state.html#block-syntax-and-semantics)”.
-
 在“语句和状态”中介绍过的花括号块语句，可以定义一个局部作用域。
 
 *<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
@@ -370,9 +368,7 @@ abstract class Stmt {
 ```
 
 
-### A2 . 2 . 2 Class statement
-
-> Class declarations are introduced in, unsurprisingly, “[Classes](http://www.craftinginterpreters.com/classes.html#class-declarations)”.
+### A2.2.2 类语句
 
 类声明是在“类”中介绍的，毫不意外。
 
@@ -399,7 +395,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.3 Expression statement
+### A2.2.3 表达式语句
 
 表达式语句在“语句和状态”中介绍过。
 
@@ -420,7 +416,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.4 Function statement
+### A2.2.4 函数语句
 
 函数声明是在“函数”中介绍的。
 
@@ -445,7 +441,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.5 If statement
+### A2.2.5 If 语句
 
 `if`语句在“控制流”中介绍过。
 
@@ -470,7 +466,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.6 Print statement
+### A2.2.6 Print 语句
 
 `print`语句在“语句和状态”中介绍过。
 
@@ -491,7 +487,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.7 Return statement
+### A2.2.7 Return 语句
 
 你需要一个函数才能返回，所以`return`语句是在“函数”中介绍的。
 
@@ -514,7 +510,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.8 Variable statement
+### A2.2.8 变量语句
 
 变量声明在“语句和状态”中介绍过。
 
@@ -537,7 +533,7 @@ abstract class Stmt {
   }
 ```
 
-### A2.2.9 While statement
+### A2.2.9 While 语句
 
 `while`语句在“控制流”中介绍过。
 

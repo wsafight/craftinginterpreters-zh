@@ -17,12 +17,20 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "01.前言",
+          label: 'I.欢迎',
+          slug: "about/I.WELCOME.md",
+        },
+        {
+          label: "01.介绍",
           slug: "introduction/readme",
         },
         {
           label: "02.领土地图",
           slug: "a-map-of-the-territory/readme",
+        },
+        {
+          label: 'II.Tree-Walk 解释器',
+          slug: "about/II.A_TREE-WALK_INTERPRETER.md",
         },
         {
           label: "03.Lox 语言",
@@ -67,6 +75,10 @@ export default defineConfig({
         {
           label: "13.继承",
           slug: "inheritance/readme"
+        },
+        {
+          label: 'III.字节码虚拟机',
+          slug: "about/III.A_BYTECODE_VIRTUAL_MACHINE.md",
         },
         {
           label: "14.字节码块",
