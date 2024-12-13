@@ -4,11 +4,11 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
-  // site: "https://wsafight.github.io",
-  // base: "craftinginterpreters-zh",
-  // redirects: {
-  //   "/": "/craftinginterpreters-zh/introduction/readme"
-  // },
+  site: "https://wsafight.github.io",
+  base: "craftinginterpreters-zh",
+  redirects: {
+    "/": "/craftinginterpreters-zh/about/part-1"
+  },
   integrations: [
     starlight({
       title: "手写解释器(翻译)",

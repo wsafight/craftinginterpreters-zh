@@ -1,15 +1,15 @@
 ---
 title: 附录 II
-description:  Appendix II
+description: Appendix II
 ---
 
-为了方便你们学习，下面是我们为自动生成jlox语法树类而[构建的小脚本](../../representing-code/readme/#522-%E8%8A%82%E7%82%B9%E6%A0%91%E5%85%83%E7%BC%96%E7%A8%8B)所产生的代码。
+为了方便你们学习，下面是我们为自动生成 jlox 语法树类而[构建的小脚本](../../representing-code/readme/#522-%E8%8A%82%E7%82%B9%E6%A0%91%E5%85%83%E7%BC%96%E7%A8%8B)所产生的代码。
 
 ## A2.1 表达式
 
-表达式是我们看到的第一个语法树节点，在“表示代码”中介绍过。主要的Expr类定义了用于针对特定表达式类型进行调度的访问者接口，并将其它表达式子类作为嵌套类包含其中。
+表达式是我们看到的第一个语法树节点，在“表示代码”中介绍过。主要的 Expr 类定义了用于针对特定表达式类型进行调度的访问者接口，并将其它表达式子类作为嵌套类包含其中。
 
-*<u>lox/Expr.java，创建新文件：</u>*
+_<u>lox/Expr.java，创建新文件：</u>_
 
 ```c
 package com.craftinginterpreters.lox;
@@ -42,7 +42,7 @@ abstract class Expr {
 
 变量赋值在“表达式与状态”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Assign extends Expr {
@@ -61,11 +61,11 @@ abstract class Expr {
   }
 ```
 
-### A2.1.2 Binary表达式
+### A2.1.2 Binary 表达式
 
 二元运算符在“表示代码”中介绍过。
 
-*<u>lox/Expr.java，嵌套在类Expr中：</u>*
+_<u>lox/Expr.java，嵌套在类 Expr 中：</u>_
 
 ```c
   static class Binary extends Expr {
@@ -90,7 +90,7 @@ abstract class Expr {
 
 函数调用语句在“函数”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Call extends Expr {
@@ -117,7 +117,7 @@ abstract class Expr {
 
 属性访问，或者说“get”表达式，在“类”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Get extends Expr {
@@ -140,7 +140,7 @@ abstract class Expr {
 
 使用括号进行分组的表达式在“表示代码”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Grouping extends Expr {
@@ -161,7 +161,7 @@ abstract class Expr {
 
 字面量值表达式在“表示代码”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Literal extends Expr {
@@ -182,7 +182,7 @@ abstract class Expr {
 
 逻辑运算符`and`和`or`在“控制流”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Logical extends Expr {
@@ -207,7 +207,7 @@ abstract class Expr {
 
 属性赋值，或者叫“set”表达式，在“类”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Set extends Expr {
@@ -232,7 +232,7 @@ abstract class Expr {
 
 `super`表达式在“继承”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Super extends Expr {
@@ -255,7 +255,7 @@ abstract class Expr {
 
 `this`表达式在“类”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class This extends Expr {
@@ -276,7 +276,7 @@ abstract class Expr {
 
 一元运算符在“表示代码”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Unary extends Expr {
@@ -299,7 +299,7 @@ abstract class Expr {
 
 变量访问表达式在“语句和状态”中介绍过。
 
-*<u>lox/Expr.java，嵌套在Expr类中：</u>*
+_<u>lox/Expr.java，嵌套在 Expr 类中：</u>_
 
 ```c
   static class Variable extends Expr {
@@ -320,7 +320,7 @@ abstract class Expr {
 
 语句形成了独立于表达式的第二个语法树节点层次。我们在“声明和状态”中添加了前几个。
 
-*<u>lox/Stmt.java，创建新文件：</u>*
+_<u>lox/Stmt.java，创建新文件：</u>_
 
 ```c
 package com.craftinginterpreters.lox;
@@ -350,7 +350,7 @@ abstract class Stmt {
 
 在“语句和状态”中介绍过的花括号块语句，可以定义一个局部作用域。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Block extends Stmt {
@@ -367,12 +367,11 @@ abstract class Stmt {
   }
 ```
 
-
 ### A2.2.2 类语句
 
 类声明是在“类”中介绍的，毫不意外。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Class extends Stmt {
@@ -399,7 +398,7 @@ abstract class Stmt {
 
 表达式语句在“语句和状态”中介绍过。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Expression extends Stmt {
@@ -420,7 +419,7 @@ abstract class Stmt {
 
 函数声明是在“函数”中介绍的。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Function extends Stmt {
@@ -445,7 +444,7 @@ abstract class Stmt {
 
 `if`语句在“控制流”中介绍过。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class If extends Stmt {
@@ -470,7 +469,7 @@ abstract class Stmt {
 
 `print`语句在“语句和状态”中介绍过。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Print extends Stmt {
@@ -491,7 +490,7 @@ abstract class Stmt {
 
 你需要一个函数才能返回，所以`return`语句是在“函数”中介绍的。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Return extends Stmt {
@@ -514,7 +513,7 @@ abstract class Stmt {
 
 变量声明在“语句和状态”中介绍过。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class Var extends Stmt {
@@ -537,7 +536,7 @@ abstract class Stmt {
 
 `while`语句在“控制流”中介绍过。
 
-*<u>lox/Stmt.java，嵌套在Stmt类中：</u>*
+_<u>lox/Stmt.java，嵌套在 Stmt 类中：</u>_
 
 ```c
   static class While extends Stmt {
