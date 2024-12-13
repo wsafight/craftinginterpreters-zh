@@ -73,9 +73,7 @@ typedef struct {
 
 首先是 4 字节的类型标签，然后是联合体。大多数体系结构都喜欢将值与它们的字长对齐。由于联合体字段中包含一个 8 字节的 double 值，所以编译器在类型字段后添加了 4 个字节的填充，以使该 double 值保持在最近的 8 字节边界上。这意味着我们实际在类型标签上花费了 8 个字节，而它只需要表示 0 到 3 之间的数字。我们可以把枚举放在一个占位更少的变量中，但这样做只会增加填充量[^5]。
 
-> So our Values are 16 bytes, which seems a little large. We’ll improve it [later](http://www.craftinginterpreters.com/optimization.html). In the meantime, they’re still small enough to store on the C stack and pass around by value. Lox’s semantics allow that because the only types we support so far are **immutable**. If we pass a copy of a Value containing the number three to some function, we don’t need to worry about the caller seeing modifications to the value. You can’t “modify” three. It’s three forever.
-
-所以我们的 Value 是 16 个字节，这似乎有点大。我们[稍后](../optimization/readme/)会改进它。同时，它们也足够小，可以存储在 C 语言的堆栈中，并按值传递。Lox 的语义允许这样做，因为到目前为止我们只支持**不可变**类型。如果我们把一个包含数字 3 的 Value 的副本传递给某个函数，我们不需要担心调用者会看到对该值的修改。你不能“修改”3，它永远都是 3。
+所以我们的 Value 是 16 个字节，这似乎有点大。我们[稍后](../../optimization/readme/)会改进它。同时，它们也足够小，可以存储在 C 语言的堆栈中，并按值传递。Lox 的语义允许这样做，因为到目前为止我们只支持**不可变**类型。如果我们把一个包含数字 3 的 Value 的副本传递给某个函数，我们不需要担心调用者会看到对该值的修改。你不能“修改”3，它永远都是 3。
 
 ## 18.2 Lox 值和 C 值
 
@@ -192,7 +190,6 @@ _<u>vm.c，在 run()方法中替换一行：</u>_
 ```
 
 首先，我们检查栈顶的 Value 是否是一个数字。如果不是，则报告运行时错误并停止解释器[^7]。否则，我们就继续运行。只有在验证之后，我们才会拆装操作数，取负，将结果封装并压入栈。
-
 
 为了访问 Value，我们使用一个新的小函数。
 
@@ -680,7 +677,6 @@ _<u>debug.c，在 disassembleInstruction()方法中添加代码：</u>_
 ```c
 !(5 - 4 > 3 * 2 == !nil)
 ```
-
 
 好吧，我承认这可能不是最*有用的*表达式，但我们正在取得进展。我们还缺少一种自带字面量形式的内置类型：字符串。它们要复杂得多，因为字符串的大小可以不同。这个微小的差异会产生巨大的影响，以至于我们给字符串单独开了一章。
 
