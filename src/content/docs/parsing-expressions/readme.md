@@ -191,13 +191,13 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 
 递归下降解析器是一种将语法规则直接翻译成命令式代码的文本翻译器。每个规则都会变成一个函数，规则主体翻译成代码大致是这样的：
 
-| 语法符号    | 代码表示                                                 |
-| ----------- | -------------------------------------------------------- | -------------------------------------------- |
-| Terminal    | Code to match and consume a token 匹配并消费一个语法标记 |
-| Nonterminal | Call to that rule’s function 调用规则对应的函数          |
-| `           | `                                                        | `if` or `switch` statement if 或 switch 语句 |
-| `*` or `+`  | `while` or `for` loop while 或 for 循环                  |
-| `?`         | `if` statement if 语句                                   |
+|  语法符号   |        代码表示        |
+| :---------: | :--------------------: |
+|  Terminal   | 匹配并消费一个语法标记 |
+| Nonterminal |   调用规则对应的函数   |
+|    `｜`     | if 或 switch 语句 |
+| `*` or `+`  |   while 或 for 循环    |
+|     `?`     |       ` if 语句        |
 
 下降被“递归”修饰是因为，如果一个规则引用自身（直接或间接）就会变为递归的函数调用。
 
