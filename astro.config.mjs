@@ -15,6 +15,12 @@ export default defineConfig({
       social: {
         github: "https://github.com/wsafight/craftinginterpreters-zh",
       },
+      locales: {
+        root: {
+          label: '简体中文',
+          lang: 'zh-CN',
+        },
+      },
       sidebar: [
         {
           label: "I.欢迎",
